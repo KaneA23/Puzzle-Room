@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour {
 	/// Moves character dependent on inputs given by player
 	/// </summary>
 	private void UpdatePlayerMovement() {
-		Vector2 moveDirection = new Vector2(movement.x, movement.y).normalized;
+		Vector2 moveDirection = movement.normalized;
 		rb.velocity = moveDirection * moveSpeed;
 
 		// Rotates player in direction they are moving
