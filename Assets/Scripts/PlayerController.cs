@@ -14,7 +14,11 @@ public class PlayerController : MonoBehaviour {
 
 	private Camera mainCam;
 
+	[SerializeField] private GameObject spriteObj;
+
 	#endregion Variables
+
+	#region Unity Methods
 
 	private void Awake() {
 		rb = GetComponent<Rigidbody2D>();
@@ -39,6 +43,8 @@ public class PlayerController : MonoBehaviour {
 		UpdateCameraMovement();
 	}
 
+	#endregion Unity Methods
+
 	/// <summary>
 	/// Stores values for the direction and rotation player wants to move in
 	/// </summary>
@@ -57,7 +63,7 @@ public class PlayerController : MonoBehaviour {
 		// Rotates player in direction they are moving
 		if (moveDirection != Vector2.zero) {
 			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg - 90;
-			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+			spriteObj.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		}
 	}
 

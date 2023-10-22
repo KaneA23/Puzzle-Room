@@ -15,34 +15,44 @@ public class Interactor : MonoBehaviour {
 	#region Variables
 
 	[Header("Interactable Settings")]
+	[SerializeField] private Transform interactorSource;
 	[SerializeField] private float interactRange = 2.0f;
 	[SerializeField] private LayerMask validLayers;
 
-	private Transform interactorSource;
+	[Space(5)]
+	[SerializeField] private GameObject interactPrompt;
+
+	private bool isHit;
 
 	#endregion Variables
 
+	#region Unity Methods
+
 	// Start is called before the first frame update
 	void Start() {
-		interactorSource = transform;
+		interactPrompt.SetActive(false);
 	}
 
 	// Update is called once per frame
 	private void Update() {
-		if (Input.GetKeyDown(KeyCode.E)) {
-			TryInteract();
-		}
+		CheckForInteractions();
 	}
 
-	/// <summary>
-	/// Checks with object player is looking at can be interacted with
-	/// </summary>
-	private void TryInteract() {
-		RaycastHit2D hit = Physics2D.Raycast(interactorSource.position, Vector2.up, interactRange, validLayers);
+	#endregion Unity Methods
 
-		if (hit.collider != null) {
+	/// <summary>
+	/// Check for interactable objects in the player's line of sight
+	/// </summary>
+	private void CheckForInteractions() {
+		RaycastHit2D hit = Physics2D.Raycast(interactorSource.position, interactorSource.up, interactRange, validLayers);
+		isHit = hit.collider != null;
+		interactPrompt.SetActive(isHit);
+
+		if (isHit) {
 			if (hit.collider.gameObject.TryGetComponent(out IInteractable interactObj)) {
-				interactObj.Interact();
+				if (Input.GetKeyDown(KeyCode.E)) {
+					interactObj.Interact();
+				}
 			} else {
 				Debug.LogError("Interactable object missing Interactable interface");
 			}
