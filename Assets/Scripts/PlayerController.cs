@@ -5,13 +5,20 @@ using UnityEngine;
 /// </summary>
 public class PlayerController : MonoBehaviour {
 
+	#region Variables
+
 	// Movement
 	private Rigidbody2D rb;
 	private Vector2 movement;
 	[SerializeField] private float moveSpeed;
 
+	private Camera mainCam;
+
+	#endregion Variables
+
 	private void Awake() {
 		rb = GetComponent<Rigidbody2D>();
+		mainCam = Camera.main;
 	}
 
 	// Start is called before the first frame update
@@ -26,6 +33,10 @@ public class PlayerController : MonoBehaviour {
 
 	private void FixedUpdate() {
 		UpdatePlayerMovement();
+	}
+
+	private void LateUpdate() {
+		UpdateCameraMovement();
 	}
 
 	/// <summary>
@@ -49,5 +60,11 @@ public class PlayerController : MonoBehaviour {
 			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		}
 	}
-}
 
+	/// <summary>
+	/// Changes camera position so it always follows player
+	/// </summary>
+	private void UpdateCameraMovement() {
+		mainCam.transform.position = new Vector2(transform.position.x, transform.position.y);
+	}
+}
